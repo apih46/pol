@@ -443,7 +443,7 @@ info_port() {
         portnginx=$(grep -w "Nginx" /root/log-install.txt | awk '{print $NF}')
         portwstls=$(grep -w "Vmess TLS" /root/log-install.txt | awk '{print $NF}')
         portws=$(grep -w "Vmess None TLS" /root/log-install.txt | awk '{print $NF}')
-        portvlessxtls=$(grep -w "Vless XTLS" /root/log-install.txt | awk '{print $NF}')
+        portvlesstls=$(grep -w "Vless TLS" /root/log-install.txt | awk '{print $NF}')
         portvless=$(grep -w "Vless None TLS" /root/log-install.txt | awk '{print $NF}')
         porttr=$(grep -w "Trojan " /root/log-install.txt | awk '{print $NF}')
         porttrgo=$(grep -w "Trojan Go" /root/log-install.txt | awk '{print $NF}')
@@ -475,7 +475,7 @@ info_port() {
         env_msg+="Nginx : $portnginx\n"
         env_msg+="Vmess TLS : $portwstls\n"
         env_msg+="Vmess HTTP : $portws\n"
-        env_msg+="Vless XTLS : $portvlessxtls\n"
+        env_msg+="Vless TLS : $portvlesstls\n"
         env_msg+="Vless HTTP : $portvless\n"
         env_msg+="Trojan : $porttr\n"
         env_msg+="Trojan-GO : $porttrgo\n"
@@ -2981,7 +2981,7 @@ data=$(sed -n '2 p' $file_user | cut -d' ' -f2)
 exp=$(echo "$data" | awk -F'/' '{print $2FS$1FS$3}' | xargs -i date -d'{}' +%Y-%m-%d)
         
 domain=$(cat /etc/$raycheck/domain)
-tls="$(cat /root/log-install.txt | grep -w "VLess TCP XTLS" | cut -d: -f2|sed 's/ //g')"
+tls="$(cat /root/log-install.txt | grep -w "Vless TLS" | cut -d: -f2|sed 's/ //g')"
 none="$(cat /root/log-install.txt | grep -w "Vless None TLS" | cut -d: -f2|sed 's/ //g')"
 
 [[ "${message_from_id[$id]}" = "$Admin_ID" ]] && {
@@ -2989,12 +2989,12 @@ mkdir -p /etc/.maAsiss/info-user-vless
 echo "$userna:$data" >/etc/.maAsiss/info-user-vless/$userna
 
 uuid=$(cat /proc/sys/kernel/random/uuid)
-sed -i '/#vlessXTLS$/a\#& '"$user $exp"'\
-},{"id": "'""$uuid""'","flow": "'""headerType=none""'","email": "'""$user""'"' /usr/local/etc/xtls/config.json
+sed -i '/#vlessWSTLS$/a\#& '"$userna $exp"'\
+},{"id": "'""$uuid""'","email": "'""$userna""'"' /etc/$raycheck/config.json
 sed -i '/#vlessWS$/a\#& '"$userna $exp"'\
-},{"id": "'""$uuid""'","flow": "'""headerType=none""'","email": "'""$user""'"' /usr/local/etc/xtls/config.json
+},{"id": "'""$uuid""'","email": "'""$userna""'"' /etc/$raycheck/config.json
 
-vlesslink1="vless://${uuid}@${domain}:$tls?path=/&security=xtls&encryption=none&headerType=none&type=tcp&flow=xtls-rprx-direct&sni=#${userna}"
+vlesslink1="vless://${uuid}@${domain}:$tls?path=/vlessws%26security=tls%26encryption=none%26type=ws#${userna}"
 vlesslink2="vless://${uuid}@${domain}:$none?path=/vlessws%26encryption=none%26type=ws#${userna}"
 
 local env_msg
@@ -3007,7 +3007,7 @@ env_msg+="Port TLS : $tls\n"
 env_msg+="Port None TLS : $none\n"
 env_msg+="ID : <code>$uuid</code>\n"
 env_msg+="Encryption : none\n"
-env_msg+="Network : tcp/ws\n"
+env_msg+="Network : websocket/ws\n"
 env_msg+="Path : /vlessws\n"
 env_msg+="━━━━━━━━━━━━━━━━━━━━━\n"
 env_msg+="Link TLS : \n"
@@ -3041,12 +3041,12 @@ sed -i "/Saldo_Reseller/c\Saldo_Reseller: $_CurrSal" /etc/.maAsiss/db_reseller/$
 sed -i "/${message_from_id}/c\USER: ${message_from_id} SALDO: $_CurrSal TYPE: reseller" $User_Active
 
 uuid=$(cat /proc/sys/kernel/random/uuid)
-sed -i '/#vlessXTLS$/a\#& '"$user $exp"'\
-},{"id": "'""$uuid""'","flow": "'""headerType=none""'","email": "'""$user""'"' /usr/local/etc/xtls/config.json
+sed -i '/#vlessWSTLS$/a\#& '"$userna $exp"'\
+},{"id": "'""$uuid""'","email": "'""$userna""'"' /etc/$raycheck/config.json
 sed -i '/#vlessWS$/a\#& '"$userna $exp"'\
-},{"id": "'""$uuid""'","flow": "'""headerType=none""'","email": "'""$user""'"' /usr/local/etc/xtls/config.json
+},{"id": "'""$uuid""'","email": "'""$userna""'"' /etc/$raycheck/config.json
 
-vlesslink1="vless://${uuid}@${domain}:$tls?path=/&security=xtls&encryption=none&headerType=none&type=tcp&flow=xtls-rprx-direct&sni=#${userna}"
+vlesslink1="vless://${uuid}@${domain}:$tls?path=/vlessws%26security=tls%26encryption=none%26type=ws#${userna}"
 vlesslink2="vless://${uuid}@${domain}:$none?path=/vlessws%26encryption=none%26type=ws#${userna}"
 
 local env_msg
@@ -3096,7 +3096,7 @@ data=$(sed -n '2 p' $file_user | cut -d' ' -f2)
 exp=$(echo "$data" | awk -F'/' '{print $2FS$1FS$3}' | xargs -i date -d'{}' +%Y-%m-%d)
         
 domain=$(cat /etc/$raycheck/domain)
-tls="$(cat /root/log-install.txt | grep -w "VLess TCP XTLS" | cut -d: -f2|sed 's/ //g')"
+tls="$(cat /root/log-install.txt | grep -w "Vless TLS" | cut -d: -f2|sed 's/ //g')"
 none="$(cat /root/log-install.txt | grep -w "Vless None TLS" | cut -d: -f2|sed 's/ //g')"
 
 [[ "${message_from_id[$id]}" = "$Admin_ID" ]] && {
@@ -3104,12 +3104,12 @@ mkdir -p /etc/.maAsiss/info-user-vless
 echo "$userna:$data" >/etc/.maAsiss/info-user-vless/$userna
 
 uuid=$(cat /proc/sys/kernel/random/uuid)
-sed -i '/#vlessXTLS$/a\#& '"$user $exp"'\
-},{"id": "'""$uuid""'","flow": "'""headerType=none""'","email": "'""$user""'"' /usr/local/etc/xtls/config.json
+sed -i '/#vlessWSTLS$/a\#& '"$userna $exp"'\
+},{"id": "'""$uuid""'","email": "'""$userna""'"' /etc/$raycheck/config.json
 sed -i '/#vlessWS$/a\#& '"$userna $exp"'\
-},{"id": "'""$uuid""'","flow": "'""headerType=none""'","email": "'""$user""'"' /usr/local/etc/xtls/config.json
+},{"id": "'""$uuid""'","email": "'""$userna""'"' /etc/$raycheck/config.json
 
-vlesslink1="vless://${uuid}@${domain}:$tls?path=/&security=xtls&encryption=none&headerType=none&type=tcp&flow=xtls-rprx-direct&sni=#${userna}"
+vlesslink1="vless://${uuid}@${domain}:$tls?path=/vlessws%26security=tls%26encryption=none%26type=ws#${userna}"
 vlesslink2="vless://${uuid}@${domain}:$none?path=/vlessws%26encryption=none%26type=ws#${userna}"
 
 local env_msg
@@ -3157,12 +3157,12 @@ sed -i "/Saldo_Reseller/c\Saldo_Reseller: $_CurrSal" /etc/.maAsiss/db_reseller/$
 sed -i "/${message_from_id}/c\USER: ${message_from_id} SALDO: $_CurrSal TYPE: reseller" $User_Active
 
 uuid=$(cat /proc/sys/kernel/random/uuid)
-sed -i '/#vlessXTLS$/a\#& '"$user $exp"'\
-},{"id": "'""$uuid""'","flow": "'""headerType=none""'","email": "'""$user""'"' /usr/local/etc/xtls/config.json
+sed -i '/#vlessWSTLS$/a\#& '"$userna $exp"'\
+},{"id": "'""$uuid""'","email": "'""$userna""'"' /etc/$raycheck/config.json
 sed -i '/#vlessWS$/a\#& '"$userna $exp"'\
-},{"id": "'""$uuid""'","flow": "'""headerType=none""'","email": "'""$user""'"' /usr/local/etc/xtls/config.json
+},{"id": "'""$uuid""'","email": "'""$userna""'"' /etc/$raycheck/config.json
 
-vlesslink1="vless://${uuid}@${domain}:$tls?path=/&security=xtls&encryption=none&headerType=none&type=tcp&flow=xtls-rprx-direct&sni=#${userna}"
+vlesslink1="vless://${uuid}@${domain}:$tls?path=/vlessws%26security=tls%26encryption=none%26type=ws#${userna}"
 vlesslink2="vless://${uuid}@${domain}:$none?path=/vlessws%26encryption=none%26type=ws#${userna}"
 
 local env_msg
@@ -3230,7 +3230,7 @@ mkdir -p /etc/.maAsiss/info-user-vless
     userna=$(echo Trial`</dev/urandom tr -dc A-Z0-9 | head -c4`)
     t_time=$1
     domain=$(cat /etc/$raycheck/domain)
-    tls="$(cat /root/log-install.txt | grep -w "VLess TCP XTLS" | cut -d: -f2|sed 's/ //g')"
+    tls="$(cat /root/log-install.txt | grep -w "Vless TLS" | cut -d: -f2|sed 's/ //g')"
     none="$(cat /root/log-install.txt | grep -w "Vless None TLS" | cut -d: -f2|sed 's/ //g')"
 
     exp=`date -d "2 days" +"%Y-%m-%d"`
@@ -3248,10 +3248,10 @@ mkdir -p /etc/.maAsiss/info-user-vless
     
 echo "$userna:$exp" >/etc/.maAsiss/info-user-vless/$userna
 uuid=$(cat /proc/sys/kernel/random/uuid)
-sed -i '/#vlessXTLS$/a\#& '"$user $exp"'\
-},{"id": "'""$uuid""'","flow": "'""headerType=none""'","email": "'""$user""'"' /usr/local/etc/xtls/config.json
+sed -i '/#vlessWSTLS$/a\#& '"$userna $exp"'\
+},{"id": "'""$uuid""'","email": "'""$userna""'"' /etc/$raycheck/config.json
 sed -i '/#vlessWS$/a\#& '"$userna $exp"'\
-},{"id": "'""$uuid""'","flow": "'""headerType=none""'","email": "'""$user""'"' /usr/local/etc/xtls/config.json
+},{"id": "'""$uuid""'","email": "'""$userna""'"' /etc/$raycheck/config.json
   
 [[ "${message_from_id[$id]}" != "$Admin_ID" ]] && {
     echo "$userna:$exp" >/etc/.maAsiss/db_reseller/${message_from_id}/user_vless/$userna
@@ -3277,7 +3277,7 @@ chmod +x /etc/.maAsiss/$userna.sh
 echo "/etc/.maAsiss/$userna.sh" | at now + $t_time hour >/dev/null 2>&1
 [[ "$t_time" == '1' ]] && hrs="hour" || hrs="hours"          
 
-vlesslink1="vless://${uuid}@${domain}:$tls?path=/&security=xtls&encryption=none&headerType=none&type=tcp&flow=xtls-rprx-direct&sni=#${userna}"
+vlesslink1="vless://${uuid}@${domain}:$tls?path=/vlessws%26security=tls%26encryption=none%26type=ws#${userna}"
 vlesslink2="vless://${uuid}@${domain}:$none?path=/vlessws%26encryption=none%26type=ws#${userna}"
 
 local env_msg
@@ -7575,16 +7575,16 @@ data=$(date '+%d/%m/%C%y' -d " +$getDays days")
 exp=$(echo "$data" | awk -F'/' '{print $2FS$1FS$3}' | xargs -i date -d'{}' +%Y-%m-%d)
 
 domain=$(cat /etc/$raycheck/domain)
-tls="$(cat /root/log-install.txt | grep -w "VLess TCP XTLS" | cut -d: -f2|sed 's/ //g')"
+tls="$(cat /root/log-install.txt | grep -w "Vless TLS" | cut -d: -f2|sed 's/ //g')"
 none="$(cat /root/log-install.txt | grep -w "Vless None TLS" | cut -d: -f2|sed 's/ //g')"
 
 uuid=$(cat /proc/sys/kernel/random/uuid)
-sed -i '/#vlessXTLS$/a\#& '"$user $exp"'\
-},{"id": "'""$uuid""'","flow": "'""headerType=none""'","email": "'""$user""'"' /usr/local/etc/xtls/config.json
+sed -i '/#vlessWSTLS$/a\#& '"$userna $exp"'\
+},{"id": "'""$uuid""'","email": "'""$userna""'"' /etc/$raycheck/config.json
 sed -i '/#vlessWS$/a\#& '"$userna $exp"'\
-},{"id": "'""$uuid""'","flow": "'""headerType=none""'","email": "'""$user""'"' /usr/local/etc/xtls/config.json
+},{"id": "'""$uuid""'","email": "'""$userna""'"' /etc/$raycheck/config.json
 
-vlesslink1="vless://${uuid}@${domain}:$tls?path=/&security=xtls&encryption=none&headerType=none&type=tcp&flow=xtls-rprx-direct&sni=#${userna}"
+vlesslink1="vless://${uuid}@${domain}:$tls?path=/vlessws%26security=tls%26encryption=none%26type=ws#${userna}"
 vlesslink2="vless://${uuid}@${domain}:$none?path=/vlessws%26encryption=none%26type=ws#${userna}"
 
 local env_msg
