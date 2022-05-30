@@ -85,6 +85,7 @@ upminutes=`uptime -p | awk '{print $4,$5}' | cut -d , -f1`
 uptimecek=`uptime -p | awk '{print $6,$7}' | cut -d , -f1`
 cekup=`uptime -p | grep -ow "day"`
 serverV=$( curl -sS https://raw.githubusercontent.com/apih46/izin/main/versi)
+JUMLAH="$(awk -F: '$3 >= 1000 && $1 != "nobody" {print $1}' /etc/passwd | wc -l)"
 
 if [ "$cekup" = "day" ]; then
 echo -e "System Uptime   :  $uphours $upminutes $uptimecek"
@@ -96,8 +97,8 @@ echo -e "Current Domain  :  $(cat /etc/$bec/domain)"
 echo -e "IP-VPS          :  $(cat /etc/myipvps)"
 echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
 echo -e "
-JUMLAH="$(awk -F: '$3 >= 1000 && $1 != "nobody" {print $1}' /etc/passwd | wc -l)"
-echo "Total OpenVPN Account : $JUMLAH user"
+
+"Total OpenVPN Account : $JUMLAH user"
 
  [\033[1;36m01\033[0m] • SSH & OVPN
  [\033[1;36m02\033[0m] • $rekk : VMess / VLess
