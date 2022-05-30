@@ -96,10 +96,9 @@ echo -e "Use Core        :  $rekk"
 echo -e "Current Domain  :  $(cat /etc/$bec/domain)"
 echo -e "IP-VPS          :  $(cat /etc/myipvps)"
 echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
+
+ "Total OpenVPN Account : $JUMLAH user"
 echo -e "
-
-          "Total OpenVPN Account : $JUMLAH user"
-
  [\033[1;36m01\033[0m] • SSH & OVPN
  [\033[1;36m02\033[0m] • $rekk : VMess / VLess
  [\033[1;36m03\033[0m] • TROJAN-GFW & GO
