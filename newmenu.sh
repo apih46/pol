@@ -104,6 +104,8 @@ echo -e "
  [\033[1;36m06\033[0m] • L2TP / PPTP
  [\033[1;36m07\033[0m] • SHADOWSOCKS obfs/ssr
 
+ [\033[1;36m09\033[0m] • CREATE VLESS
+
  [\033[1;36m55\033[0m] • Trial Generator
  [\033[1;36m66\033[0m] • Logs User Created
  [\033[1;36m77\033[0m] • VPS Setting [ Menu ]
@@ -123,7 +125,7 @@ echo -e "\033[1;37mPress [ Ctrl+C ] • To-Exit-Script\033[0m"
 echo ""
 echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
 if [[ $(cat /opt/.ver) = $serverV ]] > /dev/null 2>&1; then
-echo -e "Version       :\033[1;36m $(cat /opt/.ver) Latest Version\e[0m"
+echo -e "Version       : Latest Version\e[0m"
 echo -e "Client Name   : $Name"
 echo -e "Expiry script : $Exp"
 rm -f /home/needupdate > /dev/null 2>&1
@@ -156,6 +158,8 @@ if [[ $(cat /opt/.ver) = $serverV ]] > /dev/null 2>&1; then
        ipsec-menu
     elif [[ $x -eq 7 ]]; then
        ss-menu
+    elif [[ $x -eq 9 ]]; then
+       addxtls
     elif [[ $x -eq 55 ]]; then
        trial-menu
     elif [[ $x -eq 66 ]]; then
@@ -195,6 +199,8 @@ else
        ipsec-menu
     elif [[ $x -eq 7 ]]; then
        ss-menu
+    elif [[ $x -eq 9 ]]; then
+       addxtls
     elif [[ $x -eq 55 ]]; then
        trial-menu
     elif [[ $x -eq 66 ]]; then
